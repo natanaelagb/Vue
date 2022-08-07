@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+</head>
+<body>
+  <div id="app">
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+   
+
+  //  Vue.component('Home',{
+  //   template: '<p>home page</p>'
+  //  })
+
+  //  Vue.component('About',{
+  //   template: '<p>about page</p>'
+  //  })
+
+  //  Vue.component("NotFound", {
+  //   template: '<p>Page not found</p>'
+  //  })
+
+  
+
+    
+    
+    const Content = {template: '<p>content page</p>'}
+    const About = {template: '<p>about page</p>'}
+    const NotFound = {template: '<p>Page not found</p>'}
+    const MyNav = {
+      template: `<div>\
+        <button @click="$emit('router','/content')"> Content </button>\
+        <button @click="$emit('router','/about')"> About </button>\
+        </div>`,
+      methods: {
+        routerPush: function(path) {
+
+        }
+      }
+    }
+    const MyRouter = {
+      props: ['currentRoute'],
+      computed: {
+        ViewComponent () {
+          // console.log(routes[this.currentRoute])
+          return routes[this.currentRoute] || NotFound
+        }
+      },
+      mounted() {
+        console.log('rota atual', this.currentRoute)
+      },
+
+      render(h) {
+        return h(this.ViewComponent)
+      }
+      
+    }
+
+    const Home = {
+      template: `<div>\
+        <my-nav @router="Router"></my-nav>\
+        <my-router :currentRoute="viewRoute"></my-router>
+        </div>`,
+      components: {
+        MyNav,
+        MyRouter
+      },
+      data: () => {
+        return {
+          path: window.location.pathname
+        }
+      },
+      computed: {
+        viewRoute() {
+          return this.path
+        }
+      },
+      methods: {
+        Router(data) {
+          // console.log(data)
+          this.path = data
+        }
+      }
+      
+
+    }
+
+    const routes = {
+      '/': Content, 
+      '/content': Content,
+      '/about': About
+    }
+
+
+    window.vm = new Vue({
+      el: '#app',
+      render (h) { 
+        return h(Home) 
+      }
+    })
+
+
+  </script>
+</body>
+</html>
